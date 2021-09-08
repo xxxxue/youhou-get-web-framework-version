@@ -1,13 +1,12 @@
 // ==UserScript==
 // @name         检查vue/react版本
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.2
 // @description  try to take over the world!
 // @author       You
 // @include      *
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
 // @grant        none
-// @require      https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.slim.min.js
 // ==/UserScript==
 
 
@@ -17,8 +16,8 @@ function Entry() {
         window.$nuxt?.$root?.constructor?.version ||
         window.Vue?.version ||
         [...document.querySelectorAll('*')]
-            .map((el) => el.__vue__?.$root?.constructor?.version || el.__vue_app__?.version)
-            .filter(Boolean)[0];
+    .map((el) => el.__vue__?.$root?.constructor?.version || el.__vue_app__?.version)
+    .filter(Boolean)[0];
     if (v) {
         vueVer = `<p>Vue版本: ${v}</p>`;
     }
@@ -34,7 +33,7 @@ function Entry() {
             <div
               id="vueReactVersion"
               style="
-                  z-index: 999;
+                  z-index: 99999;
                   width: fit-content;
                   position: fixed;
                   left: 0px;
@@ -57,19 +56,22 @@ function Entry() {
               </div>
       `;
 
-        $('body').append(content);
-
+        // 追加html
+        let body= document.getElementsByTagName('body')[0];
+        body.insertAdjacentHTML("afterend",content);
+        //设置 transform
+        let myDiv = document.getElementById('vueReactVersion');
         setTimeout(function () {
-            $('#vueReactVersion').css('transform', 'translateY(0%)');
-        }, 1000);
-
-        setTimeout(function () {
-            $('#vueReactVersion').css('transform', 'translateY(-100%)');
+            myDiv.style.transform= 'translateY(0%)';
 
             setTimeout(function () {
-                $('#vueReactVersion').remove();
-            }, 2000);
-        }, 5000);
+                 myDiv.style.transform='translateY(-100%)';
+                setTimeout(function () {
+                    // 移除dom
+                    myDiv.parentNode.removeChild(myDiv)
+                }, 2000);
+            }, 5000);
+        }, 1000);
     }
 }
 
@@ -78,6 +80,6 @@ function Entry() {
     try {
         Entry();
     } catch (e) {
-        console.log('油猴脚本,发生异常:', e);
+        console.log('检查vue/react版本,油猴脚本,发生异常:', e);
     }
 })();
