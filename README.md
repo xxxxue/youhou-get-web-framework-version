@@ -1,2 +1,2 @@
-# check-website-vue-react-version
-检查网站vue/react的版本
+# get-web-framework-version
+检查网站前端框架的版本
